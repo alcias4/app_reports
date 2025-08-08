@@ -1,3 +1,4 @@
+from pandas import DataFrame
 from xlsxwriter.workbook import Workbook
 from xlsxwriter.worksheet import Worksheet
 
@@ -11,6 +12,7 @@ def calculos_graficos(
     max_ancho,
     min_largo,
     max_largo,
+    df_fil: DataFrame,
 ):
     fmt_header = wb.add_format(
         {
@@ -139,3 +141,38 @@ def calculos_graficos(
     ws_grafic.write_formula("C14", '=IFERROR(B14/F5, "")', fmt_pct3)
     ws_grafic.write_formula("C15", '=IFERROR(B15/F5, "")', fmt_pct3)
     ws_grafic.write_formula("D13", '=IFERROR(AVERAGE(datos!J2:J50000), "")', fmt_num3)
+
+    ### Correlaciones lineales
+
+    ws_grafic.write("A18", "Correlación peso vs Elogac Ancho", fmt_header)
+
+    correlacion_peso_ancho = df_fil.iloc[:, 7].corr(df_fil.iloc[:, 8], method="pearson")
+
+    ws_grafic.write("B18", correlacion_peso_ancho, fmt_num3)
+
+    ws_grafic.write("A19", "Correlación peso vs Elogac Largo", fmt_header)
+
+    correlacion_peso_largo = df_fil.iloc[:, 7].corr(df_fil.iloc[:, 9], method="pearson")
+
+    ws_grafic.write("B19", correlacion_peso_largo, fmt_num3)
+
+    ws_grafic.write("A20", "Correlación Elog Ancho vs Elogac Largo", fmt_header)
+
+    correlacion_ancho_largo = df_fil.iloc[:, 8].corr(
+        df_fil.iloc[:, 9], method="pearson"
+    )
+
+    ws_grafic.write("B20", correlacion_ancho_largo, fmt_num3)
+
+    ws_grafic.insert_textbox(
+        "C18",  # Celda de referencia (arranque)
+        "Si la correlación da mayor o igual a 7 o -7 Hay relación fuerte entre esas variables,  si es menor no hay relación lineal",  # Texto
+        {
+            "width": 250,  # Ancho en píxeles
+            "height": 90,  # Alto en píxeles
+            "fill": {"color": "#E7ECF7"},  # Color de fondo
+            "font": {"name": "Calibri", "size": 11, "color": "black"},  # Fuente
+            "align": {"horizontal": "centered", "vertical": "middle"},  # Alineación
+            "border": {"color": "black"},  # Borde
+        },
+    )

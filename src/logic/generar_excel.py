@@ -61,6 +61,7 @@ def generar_excel(
             max_ancho,
             min_largo,
             max_largo,
+            df_fil,
         )
 
         # 1) Crea los formatos
