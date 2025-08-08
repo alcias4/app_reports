@@ -11,16 +11,20 @@ def reporte_crear(df: DataFrame):
         key_prefix="report"
     )
     lista_principal = columnas_coincidencias(df)
-    lista_columnas = st.multiselect(
-        "Seleccionar columnas adicionales",
-        df.columns,
-        key="columnas elegir",
-        help="Elegir columnas aparte de las que ya estan y se agregaran al final de la tabla",
-        placeholder="Ejemplo: mallas...",
-    )
+
+    lista_columnas = []
+    # lista_columnas = st.multiselect(
+    #     "Seleccionar columnas adicionales",
+    #     df.columns,
+    #     key="columnas elegir",
+    #     help="Elegir columnas aparte de las que ya estan y se agregaran al final de la tabla",
+    #     placeholder="Ejemplo: mallas...",
+    # )
 
     lista_complet = (
-        lista_principal + lista_columnas if len(lista_columnas) > 0 else lista_principal
+        lista_principal + lista_columnas
+        if lista_columnas and len(lista_columnas) > 0
+        else lista_principal
     )
 
     if lista_complet:
