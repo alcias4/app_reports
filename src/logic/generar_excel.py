@@ -4,6 +4,7 @@ import pandas as pd
 from pandas import DataFrame
 from xlsxwriter import Workbook
 
+from logic.cal_adicionales import cal_adicionales
 from logic.cal_grafic import calculos_graficos
 
 
@@ -47,7 +48,8 @@ def generar_excel(
         df_fil.to_excel(writer, index=False, sheet_name=sheet_name)
 
         wb: Workbook = writer.book
-        ws_grafic = wb.add_worksheet("grafico")
+        ws_grafic = wb.add_worksheet("gráfico")
+        ws_adicional = wb.add_worksheet("cálculos")
 
         ws_datos = writer.sheets[sheet_name]
         # Rango de estandar
@@ -63,6 +65,8 @@ def generar_excel(
             max_largo,
             df_fil,
         )
+
+        cal_adicionales(ws_adicional, wb, df_fil)
 
         # 1) Crea los formatos
         ftm_format = wb.add_format(
@@ -151,6 +155,7 @@ def generar_excel(
         ws_grafic.insert_chart("Q2", chart_2)
         ws_grafic.insert_chart("I18", chart_3)
         ws_grafic.autofit()
+        ws_adicional.autofit()
     output.seek(0)
     return output.getvalue()
 
