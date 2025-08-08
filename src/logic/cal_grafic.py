@@ -172,7 +172,56 @@ def calculos_graficos(
             "height": 90,  # Alto en píxeles
             "fill": {"color": "#E7ECF7"},  # Color de fondo
             "font": {"name": "Calibri", "size": 11, "color": "black"},  # Fuente
-            "align": {"horizontal": "centered", "vertical": "middle"},  # Alineación
+            "align": {"vertical": "middle", "horizontal": "center"},  # Alineación
+            "border": {"color": "black"},  # Borde
+        },
+    )
+
+    ### Correlaciones no lineales spearmean
+
+    ws_grafic.write("A25", "Correlación spearmean peso vs Elogac Ancho", fmt_header)
+
+    correlacion_peso_ancho = df_fil.iloc[:, 7].corr(
+        df_fil.iloc[:, 8], method="spearman"
+    )
+
+    ws_grafic.write("B25", correlacion_peso_ancho, fmt_num3)
+
+    ws_grafic.write("A26", "Correlación spearmean peso vs Elogac Largo", fmt_header)
+
+    correlacion_peso_largo = df_fil.iloc[:, 7].corr(
+        df_fil.iloc[:, 9], method="spearman"
+    )
+
+    ws_grafic.write("B26", correlacion_peso_largo, fmt_num3)
+
+    ws_grafic.write(
+        "A27", "Correlación spearmean Elog Ancho vs Elogac Largo", fmt_header
+    )
+
+    correlacion_ancho_largo = df_fil.iloc[:, 8].corr(
+        df_fil.iloc[:, 9], method="spearman"
+    )
+
+    ws_grafic.write("B27", correlacion_ancho_largo, fmt_num3)
+    texto_spearman = (
+        "Interpretación (Correlación de Spearman)\n"
+        "- Valores cercanos a 0: no hay una tendencia clara entre las variables.\n"
+        "- Valores cercanos a 1 (o -1): relación fuerte (positiva o negativa).\n"
+        "- Spearman detecta relaciones monótonas (pueden ser curvas, no solo rectas).\n"
+        "- Estos resultados no implican causalidad, solo asociación.\n"
+        "\n"
+        "Guía rápida: |ρ| ≥ 0.7 ⇒ fuerte; 0.40–0.69 ⇒ moderada; ≤ 0.39 ⇒ débil."
+    )
+    ws_grafic.insert_textbox(
+        "C25",  # Celda de referencia (arranque)
+        texto_spearman,  # Texto
+        {
+            "width": 420,  # Ancho en píxeles
+            "height": 180,  # Alto en píxeles
+            "fill": {"color": "#E7ECF7"},  # Color de fondo
+            "font": {"name": "Calibri", "size": 11, "color": "black"},  # Fuente
+            "align": {"vertical": "middle", "horizontal": "center"},  # Alineación
             "border": {"color": "black"},  # Borde
         },
     )
