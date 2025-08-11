@@ -93,8 +93,8 @@ def columnas_coincidencias(df: DataFrame):
         "telar",
         "vte",
         "peso",
-        "elog ancho",
-        "elog largo",
+        "elogac ancho",
+        "elogac largo",
     ]
     columnas_fil = []
     for patron in columnas:

@@ -30,9 +30,10 @@ def reporte_general(datos):
                 sheet_name=hoja,
                 engine="calamine",
             )
+            df.columns = df.columns.str.replace("\n", " ", regex=False)
+            df.columns = df.columns.str.lower()
 
             if not df.empty:
-                df.columns = df.columns.str.lower()
 
                 estandares = {
                     n: int(df[n][0]) for n in df.columns if "min" in n or "max" in n
