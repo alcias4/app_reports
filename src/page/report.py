@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -31,7 +32,15 @@ def reporte_general(datos):
                 engine="calamine",
             )
             df.columns = df.columns.str.replace("\n", " ", regex=False)
+            df.columns = df.columns.str.replace(
+                "modulo elongacion largo", "elog largo", regex=False
+            )
+            df.columns = df.columns.str.replace(
+                "modulo elongacion ancho", "elog ancho", regex=False
+            )
             df.columns = df.columns.str.lower()
+
+            df = df.replace([np.inf, -np.inf], np.nan)
 
             if not df.empty:
 
