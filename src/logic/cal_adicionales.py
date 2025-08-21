@@ -96,3 +96,6 @@ def cal_adicionales(ws_adicional: Worksheet, wb: Workbook, df_fil: DataFrame):
             "border": {"color": "black"},  # Borde
         },
     )
+
+
+    
