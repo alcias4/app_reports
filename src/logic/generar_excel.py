@@ -5,14 +5,11 @@ from pandas import DataFrame
 from xlsxwriter import Workbook
 
 from logic.cal_adicionales import cal_adicionales
+from logic.cal_conteos import conteo_categorico
 from logic.cal_grafic import calculos_graficos
 
 
 def _excel_letter_to_index(letter: str) -> int:
-    """
-    Convierte una letra(s) de Excel (p.ej. 'A', 'F', 'AA') a índice 0-based.
-    A -> 0, B -> 1, ..., Z -> 25, AA -> 26, AB -> 27, etc.
-    """
     s = letter.strip().upper()
     val = 0
     for ch in s:
@@ -67,7 +64,9 @@ def generar_excel(
         )
 
         cal_adicionales(ws_adicional, wb, df_fil)
-
+        conteo_categorico(
+            df_fil, wb, min_peso, max_peso, min_ancho, max_ancho, min_largo, max_largo
+        )
         # 1) Crea los formatos
         ftm_format = wb.add_format(
             {
@@ -113,8 +112,6 @@ def generar_excel(
             )  # pequeño margen
             ws_datos.set_column(idx, idx, max_len)
         # --------------------------------------------
-        # Define las letras reales en Excel (solo aquí)
-        #   A: fechas, F: peso, I: límite min, J: límite max (ajusta a tu layout)
         chart = graficos(
             wb=wb,
             df=df_fil,
@@ -172,15 +169,7 @@ def graficos(
     margin: float = 10.0,
     name: str,
 ):
-    """
-    Crea y devuelve un chart de líneas con tres series:
-      - Serie principal en `value_col_letter`
-      - Límite Mínimo en `col_min_letter`
-      - Límite Máximo en `col_max_letter`
-    Las categorías se toman de la columna A (fechas).
-    El eje Y se fija a [min(columna)-margin, max(columna)+margin] calculado desde el DataFrame,
-    usando la letra de Excel (no el nombre).
-    """
+
     chart = wb.add_chart({"type": "line"})
 
     n_rows = len(df)
