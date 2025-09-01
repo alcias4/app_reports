@@ -31,7 +31,11 @@ def reporte_general(datos):
                 sheet_name=hoja,
                 engine="calamine",
             )
+            df.columns = df.columns.str.replace("NaT", "", regex=False)
+            df.columns = df.columns.str.replace("nan", "", regex=False)
+            df.columns = df.columns.str.replace("Nat", "", regex=False)
             df.columns = df.columns.str.replace("\n", " ", regex=False)
+            df.columns = df.columns.str.replace(".", "", regex=False)
             df.columns = df.columns.str.replace(
                 "modulo elongacion largo", "elog largo", regex=False
             )

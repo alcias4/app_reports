@@ -22,24 +22,29 @@ def reporte_crear(df: DataFrame):
 
     years = df["año"].dropna().unique().tolist()
 
-    fil_años = st.slider(
-        "Rango de años",
-        min_value=int(min(years)),
-        max_value=int(max(years)),
-        value=(
-            int(min(years)),
-            int(max(years)),
-        ),
-        step=1,
-    )
+    if len(years) >= 2:
+        fil_años = st.slider(
+            "Rango de años",
+            min_value=int(min(years)),
+            max_value=int(max(years)),
+            value=(
+                int(min(years)),
+                int(max(years)),
+            ),
+            step=1,
+        )
+    else:
+        fil_años = years
 
     lista_complet = lista_principal
 
     if lista_complet:
         df_filtrado = df.copy()
-        df_filtrado = df_filtrado[
-            (df_filtrado["año"] >= fil_años[0]) & (df["año"] <= fil_años[1])
-        ]
+
+        if len(fil_años) > 1:
+            df_filtrado = df_filtrado[
+                (df_filtrado["año"] >= fil_años[0]) & (df["año"] <= fil_años[1])
+            ]
         df_filtrado["min_peso"] = min_peso
         df_filtrado["max_peso"] = max_peso
         df_filtrado["min_elog_ancho"] = min_ancho
